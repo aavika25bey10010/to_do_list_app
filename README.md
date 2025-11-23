@@ -9,21 +9,20 @@ def load_tasks():
   return []
 def save(tasks):
     with open(data_file,"w") as f:
-    json.dump(tasks,f,indent=4)
+        json.dump(tasks,f,indent=4)
 tasks=load_tasks()
 def add_task():
     task_name=input("task:").strip()
-    deadline=input("deadline(YYYY-MM-DD) or leave blank:").strip()
-    task={
+    deadline=input("deadline(YYYY-MM-DD) or leave blank: ").strip()
+    task = {
         "name": task_name,
         "done": False,
-        "deadline": deadline if deadline
-else None,
-         "completed_on":None
-     }
-     tasks.append(task)
-     save(tasks)
-     print("added.")
+        "deadline": deadline if deadline else None,
+        "completed_on": None
+    }
+    tasks.append(task)
+    save(tasks)
+    print("added.")
 def show_tasks():
     print("\n--- Your tASKS ---")
     if not tasks:
@@ -53,8 +52,8 @@ def finish_task():
     save(tasks)
     done_today=sum(
         1 for t in tasks
-        if t["done"] and 
-        t["completed_on"==str(datetime.date.today())
+        if t["done"] and \
+        t["completed_on"] ==str(datetime.date.today())
     )
     if done_today == 1:
       print("nice! first task of day done")
@@ -62,33 +61,35 @@ def finish_task():
       print(" wow,3 tasks today!keep going")
     elif done_today >=5:
       print("productivity beast mode on")
-  def deadline_warnings():
-      today = datetime.date.today()
-      for t in tasks:
-          if not t["deadline"] or t["done"]:
-              continue
-          try:
-              d=datetime.datetime.strptime(t["deadline"] , "%Y-%m-%d").date()
-          except ValueEror:
-               continue
-          days=(d-today).days
-          if days <0:
-             print(f"!!! ALERT'{t['name']}' is overdue!")
-          elif days <=2:
-              print(f"deadline coming:'{t['name']}' ({days} days left)")
-def focus_mode():
-      print("\nentering focus mode...\n")
-      pending = [t for t in tasks if not 
-                 t["done"]]
-      if not pending:
-         print("everything is done. free mind")
-         return
-      for t in pending:
-          print("next task:")
-          print("-", t["name"])
-          input("press enter for the next task..")
-      print("focus session over.\n")
-def main() :
+
+def deadline_warnings():
+    today = datetime.date.today()
+    for t in tasks:
+        if not t["deadline"] or t["done"]:
+            continue
+        try:
+            d=datetime.datetime.strptime(t["deadline"] , "%Y-%m-%d").date()
+        except ValueError: # Corrected from ValueEror
+            continue
+        days=(d-today).days
+        if days <0:
+           print(f"!!! ALERT'{t['name']}' is overdue!")
+        elif days <=2:
+            print(f"deadline coming:'{t['name']}' ({days} days left)")
+
+def focus_mode(): # Added def
+    print("\nentering focus mode...\n")
+    pending = [t for t in tasks if not t["done"]]
+    if not pending:
+       print("everything is done. free mind")
+       return
+    for t in pending:
+        print("next task:")
+        print("-", t["name"])
+        input("press enter for the next task..")
+    print("focus session over.\n")
+
+def main(): # Added def
     while True:
         print("1. add task")
         print("2. view task")
@@ -109,8 +110,7 @@ def main() :
              break
         else:
             print("pick a number 1-5 .\n")
-main()           
-    
+main()
     
 
         
